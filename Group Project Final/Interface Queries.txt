@@ -1,0 +1,67 @@
+>>>>>>>>>QUESTION 1
+
+SELECT DISTINCT courseID
+FROM course
+
+SELECT DISTINCT s.studentID , s.name , s.surname
+FROM course c, student s, courseenrollment ce
+WHERE s.studentID = ce.FK_studentID AND ce.FK_courseID = courseIDInput
+
+>>>>>>>>>QUESTION 2
+
+SELECT c.courseID , c.courseName , c.section , c.teacher , COUNT(c.courseID) AS StudentCount
+FROM course c , courseenrollment ce
+WHERE c.courseID = ce.FK_courseID AND c.section = ce.FK_section
+GROUP BY c.courseID , c.courseName , c.section , c.teacher 
+ORDER BY c.courseID
+
+>>>>>>>>>QUESTION 3
+
+SELECT DISTINCT courseID
+FROM course
+
+SELECT e.examType
+FROM exam e, course c 
+WHERE courseIDInput  = c.courseID AND c.courseID = e.FK2_courseID 
+
+SELECT s.studentID 
+FROM course c , exam e , examenrollment ee , courseenrollment ce , student s
+WHERE e.examID = examIDInput AND e.examID = ee.FK_examID AND ee.FK2_studentID = s.studentID AND c.courseID = ce.FK_courseID AND ce.FK_studentID = s.studentID
+
+UPDATE examenrollment
+SET point = pointInput
+WHERE examIDInput = FK_examID AND studentIDInput = FK2_studentID
+
+
+>>>>>>>>>QUESTION 4 
+
+SELECT DISTINCT courseID
+FROM course
+
+SELECT e.examType
+FROM exam e , course c 
+WHERE courseIDInput = c.courseID AND c.courseID = e.FK2_courseID
+
+INSERT INTO exam (FK2_courseID, examType, percentage)
+VALUES ('courseIDInput','examTypeInput','percentageInput');
+
+
+>>>>>>>>>QUESTION 5
+
+SELECT DISTINCT courseID
+FROM course
+
+DELETE FROM courseenrollment
+WHERE courseIDInput = FK_courseID AND studentIDInput = FK_studentID (BECAUSE CASCADE)
+
+
+
+
+
+
+
+
+
+
+
+ 

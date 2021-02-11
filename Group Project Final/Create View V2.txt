@@ -1,0 +1,12 @@
+CREATE VIEW View1
+AS SELECT DISTINCT
+name,surname,faculty,program,tc,studentID,grade,email,address,phoneNumber,fatherName,motherName,gano,educationStatus,sex,marriageStatus,birthplace,disabilityStatus,bloodtype,
+licence,c.courseName, c.courseID , c.teacher, c.AKTS, ce.exemptStatus, c.examType , c.weeklyHours , c.quota, c.assistant,e.percentange , ee.point , e.examID
+FROM student s , course c , exam e , courseenrollment ce , examenrollment ee
+WHERE s.studentID = ce.FK_studentID AND ce.FK_courseID = c.courseID AND ee.FK2_studentID = s.studentID AND ee.FK_examID = e.examID AND c.courseID = e.FK2_courseID
+
+CREATE VIEW View2
+AS SELECT DISTINCT
+s.studentID,s.name,s.surname,c.courseID , c.courseName , e.examType, ee.point 
+FROM examenrollment ee, exam e , course c , courseenrollment ce, student s
+WHERE s.studentID = ee.FK2_studentID AND ee.FK_examID = e.examID AND e.FK2_courseID = c.courseID AND c.courseID = ce.FK_courseID  AND ce.FK_studentID = s.studentID

@@ -1,0 +1,87 @@
+﻿>>>>>>CREATE<<<<<<
+CREATE TABLE `studentdatabase`.`student` ( `studentID` BIGINT(11) NOT NULL , `name` VARCHAR(15) NULL , `surname` VARCHAR(15) NULL , `faculty` VARCHAR(30) NULL , `program` VARCHAR(30) NULL , `tc` BIGINT(11) NULL , `grade` INT(1) NULL , `email` VARCHAR(50) NULL , `address` VARCHAR(50) NULL , `phoneNumber` BIGINT(15) NULL , `fatherName` VARCHAR(15) NULL , `motherName` VARCHAR(15) NULL , `gano` DECIMAL(3,2) NULL , `educationStatus` VARCHAR(15) NULL , `sex` VARCHAR(10) NULL , `marriageStatus` VARCHAR(15) NULL , `birthplace` VARCHAR(30) NULL , `disabilityStatus` VARCHAR(15) NULL , `bloodtype` VARCHAR(10) NULL , `licence` VARCHAR(15) NULL)
+
+CREATE TABLE `studentdatabase`.`course` ( `courseID` VARCHAR(6) NOT NULL, `courseName` VARCHAR(50) NULL ,`section` INT(3) NOT NULL, `teacher` VARCHAR(30) NULL , `credit` INT(10) NULL , `AKTS` INT(10) NULL , `examType` VARCHAR(15) NULL , `weeklyHours` INT(15) NULL , `quota` INT(15) NULL , `assistant` VARCHAR(30) NULL)
+
+CREATE TABLE `studentdatabase`.`exam` ( `examID` INT(15) NOT NULL, `FK2_courseID` VARCHAR(6) NOT NULL ,  `examType` VARCHAR(15) NULL , `percentange` INT(3) NULL)
+
+CREATE TABLE `studentdatabase`.`examenrollment` ( `FK_examID` INT(15) NOT NULL , `FK2_studentID` BIGINT(11) NOT NULL, `point` INT(3) NULL ) 
+
+CREATE TABLE `studentdatabase`.`courseenrollment` ( `FK_courseID` VARCHAR(6) NOT NULL , `FK_studentID` BIGINT(15) NOT NULL, `exemptStatus` VARCHAR(15) NULL,`FK_section` INT(3) NOT NULL)
+
+
+
+>>>>>>KEYS<<<<<<
+ALTER TABLE `student` ADD PRIMARY KEY(`studentID`);
+
+ALTER TABLE `exam` ADD PRIMARY KEY(`examID`);
+
+ALTER TABLE `course` ADD PRIMARY KEY( `courseID`, `section`);
+
+ALTER TABLE `examenrollment` ADD FOREIGN KEY (`FK_examID`) REFERENCES `exam`(`examID`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE `examenrollment` ADD FOREIGN KEY (`FK2_studentID`) REFERENCES `student`(`studentID`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE `courseenrollment` ADD FOREIGN KEY (`FK_studentID`) REFERENCES `student`(`studentID`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE `courseenrollment` ADD FOREIGN KEY (`FK_courseID`,`FK_section`) REFERENCES `course`(`courseID`,`section`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE `exam` ADD FOREIGN KEY (`FK2_courseID`) REFERENCES `course`(`courseID`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+>>>>>>INSERT DATA<<<<<<
+
+INSERT INTO student
+SELECT studentID,name,surname,faculty,program,tc,grade,email,address,phoneNumber,fatherName,motherName,gano,educationStatus,sex,marriageStatus,birthplace,disabilityStatus,bloodtype,licence
+FROM unf
+
+INSERT INTO course
+SELECT DISTINCT
+course1ID,course1,course1Section,course1Teacher,course1Credit,course1AKTS,course1Type,course1WeeklyHours,course1Quota,course1Assistant
+FROM unf
+
+INSERT INTO course
+SELECT DISTINCT
+course2ID,course2,course2Section,course2Teacher,course2Credit,course2AKTS,course2Type,course2WeeklyHours,course2Quota,course2Assistant
+FROM unf
+
+INSERT INTO exam
+SELECT DISTINCT
+course1Exam1ID,course1ID,course1Exam1,course1Exam1Perc
+FROM unf
+
+INSERT INTO exam
+SELECT DISTINCT
+course1Exam2ID,course1ID,course1Exam2,course1Exam2Perc
+FROM unf
+
+INSERT INTO exam
+SELECT DISTINCT
+course2Exam1ID,course2ID,course2Exam1,course2Exam1Perc
+FROM unf
+
+INSERT INTO exam
+SELECT DISTINCT
+course2Exam2ID,course2ID,course2Exam2,course2Exam2Perc
+FROM unf
+
+INSERT INTO courseenrollment
+SELECT DISTINCT
+course1ID,studentID,course1ExemptStatus,course1Section
+FROM unf
+
+INSERT INTO courseenrollment
+SELECT DISTINCT
+course2ID,studentID,course2ExemptStatus,course2Section
+FROM unf
+
+INSERT INTO examenrollment
+SELECT DISTINCT course1Exam1ID,studentID,course1Exam1Result FROM unf
+
+INSERT INTO examenrollment
+SELECT DISTINCT course1Exam2ID,studentID,course1Exam2Result FROM unf
+
+INSERT INTO examenrollment
+SELECT DISTINCT course2Exam1ID,studentID,course2Exam1Result FROM unf
+
+INSERT INTO examenrollment
+SELECT DISTINCT course2Exam2ID,studentID,course2Exam2Result FROM unf
